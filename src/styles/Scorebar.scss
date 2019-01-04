@@ -1,0 +1,29 @@
+@import 'utils/variables';
+
+.scorebar {
+  margin-right: $space * 4;
+  margin-bottom: $space * 4;
+  width: $space * 100;
+  height: $space * 5;
+  border-radius: $border-radius;
+
+  background-color: $gray;
+  border: 1px solid $white;
+
+  display: inline-flex;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.scorebar-score-area {
+  background-color: $green;
+}
+
+.scorebar-text {
+  color: $white;
+  position: absolute;
+  width: inherit;
+  bottom: 0;
+  top: 0;
+}

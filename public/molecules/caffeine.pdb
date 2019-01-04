@@ -1,0 +1,38 @@
+HEADER    PROTEIN                                 23-FEB-12   NONE
+TITLE     NULL                                                        
+COMPND    MOLECULE: 201                                               
+SOURCE    NULL                                                        
+KEYWDS    NULL                                                        
+EXPDTA    NULL                                                        
+AUTHOR    Marvin                                                      
+REVDAT   1   23-FEB-12         0                                  
+HETATM    1  O   UNK     0       5.748   3.080   0.000  0.00  0.00           O+0
+HETATM    2  O   UNK     0       3.080  -1.540   0.000  0.00  0.00           O+0
+HETATM    3  N   UNK     0       5.748  -1.540   0.000  0.00  0.00           N+0
+HETATM    4  N   UNK     0       8.538   1.239   0.000  0.00  0.00           N+0
+HETATM    5  N   UNK     0       4.414   0.770   0.000  0.00  0.00           N+0
+HETATM    6  N   UNK     0       8.538  -1.239   0.000  0.00  0.00           N+0
+HETATM    7  C   UNK     0       7.081   0.770   0.000  0.00  0.00           C+0
+HETATM    8  C   UNK     0       7.081  -0.770   0.000  0.00  0.00           C+0
+HETATM    9  C   UNK     0       5.748   1.540   0.000  0.00  0.00           C+0
+HETATM   10  C   UNK     0       4.414  -0.770   0.000  0.00  0.00           C+0
+HETATM   11  C   UNK     0       9.437   0.000   0.000  0.00  0.00           C+0
+HETATM   12  C   UNK     0       5.748  -3.080   0.000  0.00  0.00           C+0
+HETATM   13  C   UNK     0       9.017   2.703   0.000  0.00  0.00           C+0
+HETATM   14  C   UNK     0       3.080   1.540   0.000  0.00  0.00           C+0
+CONECT    1    9                                                            
+CONECT    2   10                                                            
+CONECT    3    8   10   12                                                  
+CONECT    4    7   11   13                                                  
+CONECT    5    9   10   14                                                  
+CONECT    6    8   11                                                       
+CONECT    7    4    8    9                                                  
+CONECT    8    3    6    7                                                  
+CONECT    9    1    5    7                                                  
+CONECT   10    2    3    5                                                  
+CONECT   11    4    6                                                       
+CONECT   12    3                                                            
+CONECT   13    4                                                            
+CONECT   14    5                                                            
+MASTER        0    0    0    0    0    0    0    0   14    0   30    0
+END

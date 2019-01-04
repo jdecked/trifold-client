@@ -23,4 +23,11 @@
 ![Trifold Material Design Demo](./public/trifold_mdc.gif)
 
 ## Running Instructions
-(coming soon!)
+Assuming you already have both git and yarn installed:
+```
+$ git clone https://github.com/jdecked/trifold
+$ cd trifold
+$ yarn
+```
+
+Then, run `yarn start` and navigate to `http://localhost:3000` in your browser.
