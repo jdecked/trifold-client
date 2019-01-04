@@ -13,12 +13,13 @@ import {
   // $FlowFixMe: No type annotations inside third-party lib three-full
   TrackballControls
 } from 'three-full';
+import type { Store } from 'redux';
 import { updateScore } from '../actions';
 import ProteinGroup from './subjects/ProteinGroup';
 import GeneralLights from './GeneralLights';
 import colors from '../utils/colors';
 import store from '../store';
-import type { State } from '../types';
+import type { State, Action } from '../types';
 
 type ScreenDimensions = {
   width: number,
@@ -32,7 +33,7 @@ export default class SceneManager {
 
   canvas: HTMLCanvasElement;
 
-  store: State;
+  store: Store<State, Action>;
 
   camera: PerspectiveCamera;
 

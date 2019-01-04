@@ -1,8 +1,11 @@
 // @flow strict
-// $FlowFixMe: No type annotations inside third-party lib redux
 import { combineReducers } from 'redux';
 import scoreReducer from './score';
 
-export default combineReducers({
+const reducers = {
   score: scoreReducer
-});
+};
+
+export type Reducers = typeof reducers;
+
+export default combineReducers<Reducers, {}>(reducers);

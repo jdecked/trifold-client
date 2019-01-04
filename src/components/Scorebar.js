@@ -2,9 +2,9 @@
 import React from 'react';
 import '../styles/Scorebar.scss';
 
-type Props = {
+type Props = {|
   score: number
-};
+|};
 
 const Scorebar = (props: Props) => {
   const { score } = props;

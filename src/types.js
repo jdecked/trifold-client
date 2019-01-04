@@ -1,15 +1,18 @@
 // @flow strict
+import { UPDATE_SCORE } from './actions';
 
-export type State = {
+export type State = {|
   score: number
-};
+|};
 
-export type Action = {
-  type: string,
+export type ActionType = typeof UPDATE_SCORE;
+
+export type Action = {|
+  type: ActionType,
   payload: {
-    score?: number
+    score: number
   }
-};
+|};
 
 export type PromiseAction = Promise<Action>;
 export type Dispatch = (action: Action | PromiseAction) => void;

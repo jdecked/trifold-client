@@ -1,6 +1,7 @@
 // @flow strict
-// $FlowFixMe: No type annotations inside third-party lib redux
 import { createStore } from 'redux';
+import type { Dispatch } from 'redux';
 import rootReducer from './reducers/index';
+import type { State, Action } from './types';
 
-export default createStore(rootReducer);
+export default createStore<State, Action, Dispatch<Action>>(rootReducer);
