@@ -1,9 +1,10 @@
+// @flow strict
 import SceneManager from './SceneManager';
 
-export default containerElement => {
-  function createCanvas(document, element) {
+export default (containerElement: ?HTMLDivElement) => {
+  function createCanvas(document: Document, element: ?HTMLDivElement) {
     const canvas = document.createElement('canvas');
-    element.appendChild(canvas);
+    if (element) element.appendChild(canvas);
     return canvas;
   }
 

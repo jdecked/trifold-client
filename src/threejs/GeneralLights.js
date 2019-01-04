@@ -1,8 +1,10 @@
-import { DirectionalLight } from 'three';
+// @flow strict
+// $FlowFixMe: No type annotations inside third-party lib three
+import { DirectionalLight, Scene } from 'three';
 import colors from '../utils/colors';
 
 export default class GeneralLights {
-  constructor(scene) {
+  constructor(scene: Scene) {
     const light = new DirectionalLight(colors.white, 0.8);
     light.position.set(1, 1, 1);
     scene.add(light);

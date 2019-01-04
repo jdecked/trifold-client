@@ -1,9 +1,16 @@
+// @flow strict
 import {
+  // $FlowFixMe: No type annotations inside third-party lib three-full
   Scene,
+  // $FlowFixMe: No type annotations inside third-party lib three-full
   Clock,
+  // $FlowFixMe: No type annotations inside third-party lib three-full
   Color,
+  // $FlowFixMe: No type annotations inside third-party lib three-full
   WebGLRenderer,
+  // $FlowFixMe: No type annotations inside third-party lib three-full
   PerspectiveCamera,
+  // $FlowFixMe: No type annotations inside third-party lib three-full
   TrackballControls
 } from 'three-full';
 import { updateScore } from '../actions';
@@ -11,9 +18,35 @@ import ProteinGroup from './subjects/ProteinGroup';
 import GeneralLights from './GeneralLights';
 import colors from '../utils/colors';
 import store from '../store';
+import type { State } from '../types';
+
+type ScreenDimensions = {
+  width: number,
+  height: number
+};
 
 export default class SceneManager {
-  constructor(canvas) {
+  lights: GeneralLights;
+
+  protein: ProteinGroup;
+
+  canvas: HTMLCanvasElement;
+
+  store: State;
+
+  camera: PerspectiveCamera;
+
+  renderer: WebGLRenderer;
+
+  scene: Scene;
+
+  controls: TrackballControls;
+
+  screenDimensions: ScreenDimensions;
+
+  clock: Clock;
+
+  constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
     this.store = store;
     this.clock = new Clock();
@@ -27,7 +60,7 @@ export default class SceneManager {
     this.buildRender(this.screenDimensions);
     this.buildCamera(this.screenDimensions);
     this.buildTrackpadControls();
-    this.createSceneSubjects(this.scene);
+    this.createSceneSubjects();
   }
 
   onWindowResize() {
@@ -72,7 +105,7 @@ export default class SceneManager {
     this.scene.background = new Color(colors.gray);
   }
 
-  buildRender({ width, height }) {
+  buildRender({ width, height }: ScreenDimensions) {
     this.renderer = new WebGLRenderer({
       canvas: this.canvas,
       antialias: true,
@@ -86,7 +119,7 @@ export default class SceneManager {
     this.renderer.gammaOutput = true;
   }
 
-  buildCamera({ width, height }) {
+  buildCamera({ width, height }: ScreenDimensions) {
     const aspectRatio = width / height;
     const fieldOfView = 70;
     const nearPlane = 1;
@@ -102,8 +135,8 @@ export default class SceneManager {
     this.camera.position.z = 1000;
   }
 
-  createSceneSubjects(scene) {
-    this.lights = new GeneralLights(scene);
-    this.protein = new ProteinGroup(scene, 'molecules/caffeine.pdb');
+  createSceneSubjects() {
+    this.lights = new GeneralLights(this.scene);
+    this.protein = new ProteinGroup(this.scene, 'molecules/caffeine.pdb');
   }
 }

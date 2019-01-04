@@ -6,7 +6,9 @@ export type State = {
 
 export type Action = {
   type: string,
-  payload: {}
+  payload: {
+    score?: number
+  }
 };
 
 export type PromiseAction = Promise<Action>;

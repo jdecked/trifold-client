@@ -1,16 +1,33 @@
+// @flow strict
 import {
+  // $FlowFixMe: No type annotations inside third-party lib three-full
   Mesh,
+  // $FlowFixMe: No type annotations inside third-party lib three-full
   Color,
+  // $FlowFixMe: No type annotations inside third-party lib three-full
   Group,
+  // $FlowFixMe: No type annotations inside third-party lib three-full
   PDBLoader,
+  // $FlowFixMe: No type annotations inside third-party lib three-full
   BoxBufferGeometry,
+  // $FlowFixMe: No type annotations inside third-party lib three-full
   IcosahedronBufferGeometry,
+  // $FlowFixMe: No type annotations inside third-party lib three-full
   Vector3,
-  MeshPhongMaterial
+  // $FlowFixMe: No type annotations inside third-party lib three-full
+  MeshPhongMaterial,
+  // $FlowFixMe: No type annotations inside third-party lib three-full
+  Scene
 } from 'three-full';
 
 export default class ProteinGroup {
-  constructor(scene, pathToMolecule) {
+  group: Group;
+
+  offset: Vector3;
+
+  loader: PDBLoader;
+
+  constructor(scene: Scene, pathToMolecule: string) {
     this.group = new Group();
     this.offset = new Vector3();
     this.loader = new PDBLoader();
@@ -20,12 +37,7 @@ export default class ProteinGroup {
     scene.add(this.group);
   }
 
-  update(time) {
-    this.group.rotation.x = time;
-    this.group.rotation.y = time * 0.7;
-  }
-
-  loadMolecule(url) {
+  loadMolecule(url: string) {
     while (this.group.children.length > 0) {
       const object = this.group.children[0];
       object.parent.remove(object);

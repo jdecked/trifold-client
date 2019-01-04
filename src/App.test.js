@@ -1,8 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { shallow } from 'enzyme';
 
-it('is a reminder to install enzyme & eventually write tests', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<div />, div);
-  ReactDOM.unmountComponentAtNode(div);
+it('reminds me to figure out how to test with Three.js later', () => {
+  shallow(<div />);
 });

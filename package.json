@@ -4,6 +4,8 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "enzyme": "^3.8.0",
+    "enzyme-adapter-react-16": "^1.7.1",
     "eslint-plugin-flowtype": "^3.2.0",
     "flow": "^0.2.3",
     "flow-typed": "^2.5.1",
@@ -12,6 +14,7 @@
     "react-dom": "^16.5.2",
     "react-redux": "^5.1.0",
     "react-scripts": "2.0.5",
+    "react-test-renderer": "^16.7.0",
     "redux": "^4.0.1",
     "three": "^0.99.0",
     "three-full": "^11.3.2"
