@@ -1,22 +1,13 @@
 // @flow strict
 import {
-  // $FlowFixMe: No type annotations inside third-party lib three-full
   Mesh,
-  // $FlowFixMe: No type annotations inside third-party lib three-full
   Color,
-  // $FlowFixMe: No type annotations inside third-party lib three-full
   Group,
-  // $FlowFixMe: No type annotations inside third-party lib three-full
   PDBLoader,
-  // $FlowFixMe: No type annotations inside third-party lib three-full
   BoxBufferGeometry,
-  // $FlowFixMe: No type annotations inside third-party lib three-full
   IcosahedronBufferGeometry,
-  // $FlowFixMe: No type annotations inside third-party lib three-full
   Vector3,
-  // $FlowFixMe: No type annotations inside third-party lib three-full
   MeshPhongMaterial,
-  // $FlowFixMe: No type annotations inside third-party lib three-full
   Scene
 } from 'three-full';
 

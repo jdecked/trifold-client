@@ -1,0 +1,63 @@
+.button {
+  border-radius: 2px;
+  border: none;
+  padding: 0;
+  min-height: 48px;
+  min-width: 120px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2),
+              0 1px 1px 0 rgba(0, 0, 0, 0.14),
+              0 2px 1px -1px rgba(0, 0, 0, 0.12);
+  opacity: 1.0;
+  cursor: pointer;
+  position: relative;
+}
+
+.button:focus {
+  outline: none;
+  box-shadow: 0 3px 5px -1 rgba(0, 0, 0, 0.2),
+              0 5px 8px 0 rgba(0, 0, 0, 0.14),
+              0 1px 14px 0 rgba(0, 0, 0, 0.12);
+}
+
+.button:active {
+  box-shadow: 0 4px 5px -2px rgba(0, 0, 0, 0.2),
+              0 7px 10px 1px rgba(0, 0, 0, 0.14),
+              0 2px 16px 1px rgba(0, 0, 0, 0.12);
+}
+
+.button:hover {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  filter: grayscale(5%);  /* our penance for not using SASS */
+}
+
+.button--primary {
+  background: linear-gradient(180deg, #F15B26 0%, #F0943C 100%);
+  color: #FFFFFF;
+}
+
+.button--secondary {
+  background: linear-gradient(180deg, #C8C2BB 0%, #DEDAD6 100%);
+  color: #66625D;
+}
+
+.button--tertiary {
+  background: linear-gradient(180deg, #FFFFFF 0%, #F9F9F9 100%);
+  color: #767676;
+}
+
+.button--disabled {
+  box-shadow: none;
+  opacity: 0.26;
+}
+
+.button-label {
+  padding: 0 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.button-label-text {
+  font-weight: 600;  /* semi-bold */
+  font-size: 16px;
+}

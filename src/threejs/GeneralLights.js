@@ -1,5 +1,4 @@
 // @flow strict
-// $FlowFixMe: No type annotations inside third-party lib three
 import { DirectionalLight, Scene } from 'three';
 import colors from '../utils/colors';
 

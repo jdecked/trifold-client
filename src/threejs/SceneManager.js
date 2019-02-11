@@ -1,16 +1,10 @@
 // @flow strict
 import {
-  // $FlowFixMe: No type annotations inside third-party lib three-full
   Scene,
-  // $FlowFixMe: No type annotations inside third-party lib three-full
   Clock,
-  // $FlowFixMe: No type annotations inside third-party lib three-full
   Color,
-  // $FlowFixMe: No type annotations inside third-party lib three-full
   WebGLRenderer,
-  // $FlowFixMe: No type annotations inside third-party lib three-full
   PerspectiveCamera,
-  // $FlowFixMe: No type annotations inside third-party lib three-full
   TrackballControls
 } from 'three-full';
 import type { Store } from 'redux';

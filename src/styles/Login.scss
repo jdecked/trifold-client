@@ -1,0 +1,57 @@
+/* large/landscape tablet/desktop — 12 columns */
+.sign-in-container {
+  background-color: #F7F7F7;
+  display: grid;
+  grid-template-columns: [gutter] 16px repeat(11, [col] 1fr [margin] 16px) [col] 1fr [gutter] 16px;
+  grid-template-rows: [gutter] 16px repeat(11, [row] 1fr [margin] 16px) [row] 1fr [gutter] 16px;
+  height: 100%;
+}
+
+.sign-in-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  max-height: 248px;
+  grid-row: 8 / 15;
+  grid-column: 13 / 13;
+}
+
+/* mobile landscape, tablets — 8 columns */
+@media screen and (max-width: 960px) {
+  .sign-in-container {
+    grid-template-columns: [gutter] 16px repeat(7, [col] 1fr [margin] 16px) [col] 1fr [gutter] 16px;
+    grid-template-rows: [gutter] 16px repeat(7, [row] 1fr [margin] 16px) [row] 1fr [gutter] 16px;
+  }
+
+  .sign-in-content {
+    grid-row: 4 / span 10;
+    grid-column: 9 / 9;
+  }
+}
+
+/* mobile portrait — 4 columns */
+@media screen and (max-width: 600px) and (orientation: portrait) {
+  .sign-in-container {
+    grid-template-columns: [gutter] 16px repeat(3, [col] 1fr [margin] 16px) [col] 1fr [gutter] 16px;
+    grid-template-rows: [gutter] 16px repeat(3, [row] 1fr [margin] 16px) [row] 1fr [gutter] 16px;
+  }
+
+  .sign-in-content {
+    grid-row: 4 / 7;
+    grid-column: 5 / 5;
+  }
+}
+
+/* very small mobiles landscape */
+@media screen and (max-width: 600px) and (orientation: landscape) {
+  .sign-in-container {
+    grid-template-columns: [gutter] 16px repeat(3, [col] 1fr [margin] 16px) [col] 1fr [gutter] 16px;
+    grid-template-rows: [gutter] 16px repeat(3, [row] 1fr [margin] 16px) [row] 1fr [gutter] 16px;
+  }
+
+  .sign-in-content {
+    grid-row: 2 / span 6;
+    grid-column: 5 / 5;
+  }
+}
