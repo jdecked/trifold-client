@@ -42,7 +42,7 @@ export default class App extends Component<{}, State> {
       .then(responseData => responseData);
   }
 
-  redirect(routerProps: ContextRouter) {
+  redirect = (routerProps: ContextRouter) => {
     const { loggedInUser } = this.state;
 
     if (loggedInUser) {
@@ -54,30 +54,28 @@ export default class App extends Component<{}, State> {
         to={{ pathname: '/login', state: { from: routerProps.location } }}
       />
     );
-  }
+  };
 
   render() {
     const { loggedInUser } = this.state;
-    console.log('lalala');
 
     return (
-      // <BrowserRouter>
-      //   <Switch>
-      //     <AuthRoute
-      //       path="/fold"
-      //       isAuthenticated={!!loggedInUser}
-      //       component={ProteinFoldingScreen}
-      //     />
-      //     <AuthRoute
-      //       path="/home"
-      //       isAuthenticated={!!loggedInUser}
-      //       component={Home}
-      //     />
-      //     <Route path="/login" component={Login} />
-      //     <Route path="/" render={this.redirect} />
-      //   </Switch>
-      // </BrowserRouter>
-      <div style={{ backgroundColor: 'red', height: '100%' }} />
+      <BrowserRouter>
+        <Switch>
+          <AuthRoute
+            path="/fold"
+            isAuthenticated={!!loggedInUser}
+            component={ProteinFoldingScreen}
+          />
+          <AuthRoute
+            path="/home"
+            isAuthenticated={!!loggedInUser}
+            component={Home}
+          />
+          <Route path="/login" component={Login} />
+          <Route path="/" render={this.redirect} />
+        </Switch>
+      </BrowserRouter>
     );
   }
 }
