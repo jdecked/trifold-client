@@ -1,25 +1,26 @@
-# base image
-FROM node:11.6.0
+# build React app
+FROM node:11.6.0 as build-stage
 
-# set working directory
 RUN mkdir /usr/src/app
 WORKDIR /usr/src/app
 
-# add `/usr/src/app/node_modules/.bin` to $PATH
+ARG REACT_APP_OAUTH_CLIENT_ID
+ENV REACT_APP_OAUTH_CLIENT_ID=$REACT_APP_OAUTH_CLIENT_ID
+
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
-ARG NODE_ENV
-ENV NODE_ENV=$NODE_ENV
+COPY package.json yarn.lock ./
+RUN yarn install
 
-# install and cache app dependencies
-COPY package.json /usr/src/app/package.json
-RUN yarn > /dev/null
-RUN yarn global add react-scripts > /dev/null
+COPY . .
 
-# add app
-ADD . /usr/src/app
-
-# build react app
+RUN CI=true yarn test
 RUN yarn build
 
-# start app
-CMD ["pushstate-server", "build"]
+# serve files via nginx
+FROM nginx:1.13.12
+
+RUN rm /etc/nginx/conf.d/default.conf
+COPY --from=build-stage /usr/src/app/build /usr/share/nginx/html
+COPY --from=build-stage /usr/src/app/nginx.conf /etc/nginx/nginx.conf
+EXPOSE 80
+ENTRYPOINT ["nginx","-g","daemon off;"]

@@ -1,2 +1,6 @@
-node_modules
-.env
+*
+!src
+!public
+!package.json
+!yarn.lock
+!nginx.conf
