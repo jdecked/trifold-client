@@ -13,7 +13,6 @@
     "flow-typed": "^2.5.1",
     "material-ui": "^0.20.2",
     "node-sass": "^4.11.0",
-    "pushstate-server": "^3.0.1",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-ink": "^6.4.0",

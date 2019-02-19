@@ -8,17 +8,16 @@ import Home from './components/Home';
 import Login from './components/Login';
 import AuthRoute from './components/AuthRoute';
 import { authfetch } from './utils/authfetch';
+import type { Data } from './types';
 
 type State = {
-  loggedInUser: {}
+  loggedInUser: ?{}
 };
 
-type Data = {
-  token: string
-};
+type Props = {};
 
-export default class App extends Component<{}, State> {
-  constructor(props) {
+export default class App extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       loggedInUser: null
@@ -56,6 +55,8 @@ export default class App extends Component<{}, State> {
     );
   };
 
+  renderLogin = () => <Login handleLogIn={this.setLoggedInUser} />;
+
   render() {
     const { loggedInUser } = this.state;
 
@@ -72,7 +73,7 @@ export default class App extends Component<{}, State> {
             isAuthenticated={!!loggedInUser}
             component={Home}
           />
-          <Route path="/login" component={Login} />
+          <Route path="/login" render={this.renderLogin} />
           <Route path="/" render={this.redirect} />
         </Switch>
       </BrowserRouter>

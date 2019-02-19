@@ -17,3 +17,7 @@ export type Action = {|
 export type PromiseAction = Promise<Action>;
 export type Dispatch = (action: Action | PromiseAction) => void;
 export type GetState = () => State;
+
+export type Data = {
+  token: string
+};

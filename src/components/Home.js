@@ -1,6 +1,5 @@
 // @flow strict
 import React, { Component } from 'react';
-import '../styles/Home.scss';
 import threeEntryPoint from '../threejs/threeEntryPoint';
 import Scorebar from '../containers/ScorebarContainer';
 

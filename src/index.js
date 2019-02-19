@@ -2,6 +2,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 // $FlowFixMe: Type annotation needed for serviceWorker
 // import * as serviceWorker from './serviceWorker';
@@ -11,11 +12,39 @@ import store from './store';
 import './styles/index.scss';
 
 const rootElement = document.getElementById('root');
+// TODO (jdc): Remove on next major material-ui version release
+// eslint-disable-next-line no-underscore-dangle
+window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#09814A',
+      dark: '#005321',
+      contrastText: '#FFFFFF'
+    },
+    typography: {
+      fontSize: 16
+    },
+    secondary: {
+      light: '#577363',
+      main: '#2D4739',
+      dark: '#062013',
+      contrastText: '#FFFFFF'
+    },
+    text: {
+      primary: '#616161',
+      secondary: '#707070'
+    }
+  }
+});
 
 if (rootElement) {
   render(
     <Provider store={store}>
-      <App />
+      <MuiThemeProvider theme={theme}>
+        <App />
+      </MuiThemeProvider>
     </Provider>,
     rootElement
   );

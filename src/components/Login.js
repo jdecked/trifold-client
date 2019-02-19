@@ -2,29 +2,49 @@
 import React, { Component } from 'react';
 // $FlowFixMe: material-ui has no up-to-date types :(
 import Button from '@material-ui/core/Button';
+// $FlowFixMe: material-ui has no up-to-date types :(
+import { withStyles } from '@material-ui/core/styles';
+import type { Data } from '../types';
 import GoogleLogo from './GoogleLogo';
-import '../styles/Login.scss';
 
 type Props = {
-  handleLogIn: ({}) => void
+  handleLogIn: Data => void
 };
 
 type GoogleUser = {
   getAuthResponse: () => { idToken: string }
 };
 
+const styles = theme => ({
+  container: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: theme.palette.background.default
+  },
+  textLabel: {
+    whiteSpace: 'nowrap',
+    marginLeft: theme.spacing.unit
+  },
+  button: {
+    padding: `${theme.spacing.unit * 1.5}px ${theme.spacing.unit * 2.5}px`
+  }
+});
+
 class Login extends Component<Props> {
   /* eslint-disable react/sort-comp */
   googleButton: ?HTMLElement;
 
-  auth2: () => void;
+  auth2: () => { attachClickHandler: (HTMLElement, {}, GoogleUser) => void };
   /* eslint-enable react/sort-comp */
 
   componentDidMount() {
     this.initializeGoogleLogin();
   }
 
-  onLogin(googleUser: GoogleUser) {
+  onLogin = (googleUser: GoogleUser) => {
     const { idToken } = googleUser.getAuthResponse();
     const { handleLogIn } = this.props;
 
@@ -36,55 +56,65 @@ class Login extends Component<Props> {
       },
       method: 'post',
       body: JSON.stringify({
-        idToken
+        id_token: idToken
       })
     })
       .then(response => response.json())
       .then(data => {
         handleLogIn(data);
       });
-  }
+  };
 
-  attachLogin(element: ?HTMLElement) {
+  attachLogin = (element: ?HTMLElement) => {
     if (element) {
       this.auth2.attachClickHandler(element, {}, googleUser => {
         this.onLogin(googleUser);
       });
     }
-  }
+  };
 
   initializeGoogleLogin() {
-    window.gapi.load('auth2', () => {
-      // Retrieve the singleton for the GoogleAuth library and set up the client.
-      // TODO (jdc): Turn client_id into an env variable
-      this.auth2 = window.gapi.auth2.init({
-        client_id:
-          '121062910806-hi9gi8sm3g1or6k88bilq8quk1do71bs.apps.googleusercontent.com',
-        cookiepolicy: 'single_host_origin'
-      });
+    // window isn't guaranteed to be loaded in time for every build
+    if (window) {
+      window.gapi.load('auth2', () => {
+        // Retrieve the singleton for the GoogleAuth library and set up the client.
+        this.auth2 = window.gapi.auth2.init({
+          client_id: process.env.REACT_APP_OAUTH_CLIENT_ID
+        });
 
-      this.attachLogin(this.googleButton);
-    });
+        this.attachLogin(this.googleButton);
+      });
+    } else if (global) {
+      global.gapi.load('auth2', () => {
+        // Retrieve the singleton for the GoogleAuth library and set up the client.
+        this.auth2 = global.gapi.auth2.init({
+          client_id: process.env.REACT_APP_OAUTH_CLIENT_ID
+        });
+
+        this.attachLogin(this.googleButton);
+      });
+    }
   }
 
   render() {
+    const { classes } = this.props;
+
     return (
-      <div className="sign-in-container">
-        <div className="sign-in-content">
-          <Button
-            variant="contained"
-            color="primary"
-            ref={googleButton => {
-              this.googleButton = googleButton;
-            }}
-          >
-            Log In
-            <GoogleLogo />
-          </Button>
-        </div>
+      <div className={classes.container}>
+        <Button
+          variant="contained"
+          color="primary"
+          className={classes.button}
+          buttonRef={googleButton => {
+            this.googleButton = googleButton;
+          }}
+        >
+          <GoogleLogo />
+          <span className={classes.textLabel}>Log In</span>
+        </Button>
       </div>
     );
   }
 }
 
-export default Login;
+export default withStyles(styles)(Login);
