@@ -1,0 +1,14 @@
+# build React app
+FROM node:11.6.0 as build-stage
+
+RUN mkdir /usr/src/app
+WORKDIR /usr/src/app
+
+ARG REACT_APP_OAUTH_CLIENT_ID
+ENV REACT_APP_OAUTH_CLIENT_ID=$REACT_APP_OAUTH_CLIENT_ID
+
+ENV PATH /usr/src/app/node_modules/.bin:$PATH
+COPY package.json yarn.lock ./
+RUN yarn install
+
+COPY . .
