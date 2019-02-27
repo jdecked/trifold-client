@@ -75,7 +75,7 @@ class Login extends Component<Props> {
 
   initializeGoogleLogin() {
     // window isn't guaranteed to be loaded in time for every build
-    if (window) {
+    if (window && window.gapi) {
       window.gapi.load('auth2', () => {
         // Retrieve the singleton for the GoogleAuth library and set up the client.
         this.auth2 = window.gapi.auth2.init({
@@ -84,7 +84,7 @@ class Login extends Component<Props> {
 
         this.attachLogin(this.googleButton);
       });
-    } else if (global) {
+    } else if (global && global.gapi) {
       global.gapi.load('auth2', () => {
         // Retrieve the singleton for the GoogleAuth library and set up the client.
         this.auth2 = global.gapi.auth2.init({
