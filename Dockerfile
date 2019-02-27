@@ -13,7 +13,6 @@ RUN yarn install
 
 COPY . .
 
-RUN CI=true yarn test
 RUN yarn build
 
 # serve files via nginx
