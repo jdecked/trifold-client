@@ -6,6 +6,7 @@ WORKDIR /usr/src/app
 
 ARG REACT_APP_OAUTH_CLIENT_ID
 ENV REACT_APP_OAUTH_CLIENT_ID=$REACT_APP_OAUTH_CLIENT_ID
+ENV CI=true
 
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
 COPY package.json yarn.lock ./
