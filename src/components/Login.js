@@ -45,7 +45,7 @@ class Login extends Component<Props> {
   }
 
   onLogin = (googleUser: GoogleUser) => {
-    const { idToken } = googleUser.getAuthResponse();
+    const idToken = googleUser.getAuthResponse().id_token;
     const { handleLogIn } = this.props;
 
     fetch('/api/v1/users', {

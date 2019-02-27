@@ -24,7 +24,7 @@ export default class App extends Component<Props, State> {
     };
   }
 
-  setLoggedInUser(data: Data) {
+  setLoggedInUser = (data: Data) => {
     this.setState({
       loggedInUser: data
     });
@@ -39,7 +39,7 @@ export default class App extends Component<Props, State> {
     authfetch('/')
       .then(response => response.json())
       .then(responseData => responseData);
-  }
+  };
 
   redirect = (routerProps: ContextRouter) => {
     const { loggedInUser } = this.state;
