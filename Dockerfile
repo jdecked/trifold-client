@@ -18,7 +18,7 @@ COPY . .
 RUN yarn build
 
 # serve files via nginx
-FROM nginx:1.13.12
+FROM nginx:1.13.12-alpine-perl
 
 RUN rm /etc/nginx/conf.d/default.conf
 COPY --from=build-stage /usr/src/app/build /usr/share/nginx/html
