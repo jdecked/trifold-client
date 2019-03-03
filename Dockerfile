@@ -5,7 +5,9 @@ RUN mkdir /usr/src/app
 WORKDIR /usr/src/app
 
 ARG REACT_APP_OAUTH_CLIENT_ID
-ENV REACT_APP_OAUTH_CLIENT_ID=$REACT_APP_OAUTH_CLIENT_ID
+ENV REACT_APP_OAUTH_CLIENT_ID=${REACT_APP_OAUTH_CLIENT_ID}
+ARG PORT
+ENV PORT=${PORT}
 
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
 COPY package.json yarn.lock ./
@@ -21,5 +23,4 @@ FROM nginx:1.13.12
 RUN rm /etc/nginx/conf.d/default.conf
 COPY --from=build-stage /usr/src/app/build /usr/share/nginx/html
 COPY --from=build-stage /usr/src/app/nginx.conf /etc/nginx/nginx.conf
-EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
