@@ -18,14 +18,10 @@ COPY . .
 RUN yarn build
 
 # serve files via nginx
-FROM nginx:1.13.12-alpine-perl
+FROM nginx:1.13.12-alpine
 
-RUN rm /etc/nginx/conf.d/default.conf
+COPY --from=build-stage /usr/src/app/default.conf.template /etc/nginx/conf.d/default.conf.template
 COPY --from=build-stage /usr/src/app/build /usr/share/nginx/html
 COPY --from=build-stage /usr/src/app/nginx.conf /etc/nginx/nginx.conf
 
-RUN export PORT="${PORT:-80}" && \
-  sed -i "s/listen 80/listen ${PORT}/" /etc/nginx/nginx.conf && \
-  cat /etc/nginx/nginx.conf
-
-CMD ["nginx", "-g", "daemon off;"]
+CMD /bin/bash -c "envsubst '\$PORT' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf" && nginx -g 'daemon off;'
