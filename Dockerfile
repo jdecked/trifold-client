@@ -23,4 +23,9 @@ FROM nginx:1.13.12-alpine-perl
 RUN rm /etc/nginx/conf.d/default.conf
 COPY --from=build-stage /usr/src/app/build /usr/share/nginx/html
 COPY --from=build-stage /usr/src/app/nginx.conf /etc/nginx/nginx.conf
+
+RUN export PORT="${PORT:-80}" && \
+  sed -i "s/listen 80/listen ${PORT}/" /etc/nginx/nginx.conf && \
+  cat /etc/nginx/nginx.conf
+
 CMD ["nginx", "-g", "daemon off;"]
