@@ -4,3 +4,4 @@
 !package.json
 !yarn.lock
 !nginx.conf
+!default.conf.template
