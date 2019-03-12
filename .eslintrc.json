@@ -1,13 +1,19 @@
 {
-  "extends": "airbnb",
+  "extends": [
+    "airbnb",
+    "plugin:flowtype/recommended",
+    "plugin:mocha/recommended"
+  ],
   "parser": "babel-eslint",
   "env": {
     "browser": true,
-    "es6": true
+    "es6": true,
+    "mocha": true
   },
   "plugins": [
     "prettier",
-    "flowtype"
+    "flowtype",
+    "mocha"
   ],
   "rules": {
     "prettier/prettier": "error",
@@ -16,6 +22,7 @@
     "react/require-default-props": "off",
     "comma-dangle": "off",
     "arrow-parens": "off",
-    "object-curly-newline": "off"
+    "object-curly-newline": "off",
+    "operator-linebreak": ["error", "after"]
   }
 }

@@ -4,16 +4,8 @@ import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 // $FlowFixMe: material-ui has no up-to-date types :(
 import { withStyles } from '@material-ui/core/styles';
-import type { Data } from '../types';
+import type { RouterHistory } from 'react-router-dom';
 import GoogleLogo from './GoogleLogo';
-
-type Props = {
-  handleLogIn: Data => void
-};
-
-type GoogleUser = {
-  getAuthResponse: () => { idToken: string }
-};
 
 const styles = theme => ({
   container: {
@@ -33,6 +25,16 @@ const styles = theme => ({
   }
 });
 
+type Props = {
+  setLoggedInUser: string => void,
+  classes: typeof styles,
+  history: RouterHistory
+};
+
+type GoogleUser = {
+  getAuthResponse: () => { id_token: string }
+};
+
 class Login extends Component<Props> {
   /* eslint-disable react/sort-comp */
   googleButton: ?HTMLElement;
@@ -45,24 +47,12 @@ class Login extends Component<Props> {
   }
 
   onLogin = (googleUser: GoogleUser) => {
+    const { history, setLoggedInUser } = this.props;
     const idToken = googleUser.getAuthResponse().id_token;
-    const { handleLogIn } = this.props;
 
-    fetch('/api/v1/users', {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest'
-      },
-      method: 'post',
-      body: JSON.stringify({
-        id_token: idToken
-      })
-    })
-      .then(response => response.json())
-      .then(data => {
-        handleLogIn(data);
-      });
+    setLoggedInUser(idToken);
+    // TODO (jdc): Build decent /home route
+    history.push('/fold');
   };
 
   attachLogin = (element: ?HTMLElement) => {

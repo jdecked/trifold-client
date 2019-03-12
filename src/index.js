@@ -2,12 +2,13 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
+// $FlowFixMe: material-ui has no up-to-date types :(
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 // $FlowFixMe: Type annotation needed for serviceWorker
 // import * as serviceWorker from './serviceWorker';
 
-import App from './App';
+import AppContainer from './containers/AppContainer';
 import store from './store';
 import './styles/index.scss';
 
@@ -43,7 +44,7 @@ if (rootElement) {
   render(
     <Provider store={store}>
       <MuiThemeProvider theme={theme}>
-        <App />
+        <AppContainer />
       </MuiThemeProvider>
     </Provider>,
     rootElement

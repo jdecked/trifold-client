@@ -21,6 +21,7 @@
     "react-scripts": "2.0.5",
     "react-test-renderer": "^16.7.0",
     "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0",
     "three": "^0.99.0",
     "three-full": "^11.3.2"
   },
@@ -29,7 +30,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint . --ignore-path ../.gitignore && flow"
+    "lint": "eslint ./src --ignore-path .gitignore && flow"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -45,6 +46,7 @@
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-mocha": "^5.3.0",
     "eslint-plugin-prettier": "^3.0.0",
     "eslint-plugin-react": "^7.11.1",
     "flow-bin": "^0.89.0",

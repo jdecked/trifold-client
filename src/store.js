@@ -1,7 +1,12 @@
 // @flow strict
-import { createStore } from 'redux';
-import type { Dispatch } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+// $FlowFixMe: redux-thunk has no type definitions
+import thunk from 'redux-thunk';
 import rootReducer from './reducers/index';
-import type { State, Action } from './types';
+import type { State, Action, Dispatch } from './types';
 
-export default createStore<State, Action, Dispatch<Action>>(rootReducer);
+// $FlowFixMe: Typing with thunks is infuriatingly broken
+export default createStore<State, Action, Dispatch>(
+  rootReducer,
+  applyMiddleware(thunk)
+);

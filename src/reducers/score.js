@@ -1,8 +1,15 @@
 // @flow strict
 import { UPDATE_SCORE } from '../actions';
-import type { Action } from '../types';
+import type { Action, ScoreState } from '../types';
 
-export default function score(state: number = 0, action: Action) {
+const defaultState = {
+  score: 0
+};
+
+export default function score(
+  state: ScoreState = defaultState,
+  action: Action
+) {
   switch (action.type) {
     case UPDATE_SCORE:
       return action.payload.score;
