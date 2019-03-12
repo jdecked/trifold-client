@@ -12,7 +12,7 @@ export default function score(
 ) {
   switch (action.type) {
     case UPDATE_SCORE:
-      return action.payload.score;
+      return { score: action.payload.score };
     default:
       return state;
   }

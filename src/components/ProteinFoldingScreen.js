@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import '../styles/ProteinFoldingScreen.scss';
 import threeEntryPoint from '../threejs/threeEntryPoint';
-import Scorebar from '../containers/ScorebarContainer';
+import ScorebarContainer from '../containers/ScorebarContainer';
 
 export default class ProteinFoldingScreen extends Component<{}> {
   // eslint-disable-next-line react/sort-comp
@@ -22,7 +22,7 @@ export default class ProteinFoldingScreen extends Component<{}> {
         className="ProteinFoldingScreen"
         ref={element => this.setThreeRef(element)}
       >
-        <Scorebar />
+        <ScorebarContainer />
       </div>
     );
   }
