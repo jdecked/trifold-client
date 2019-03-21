@@ -18,12 +18,12 @@ export default class AminoAcidGroup {
 
   loader: ExtendedPDBLoader;
 
-  constructor(scene: Scene, pathToMolecule: string, bondColor: number) {
+  constructor(scene: Scene, pathToMolecule: string) {
     this.group = new Group();
     this.offset = new Vector3();
     this.loader = new ExtendedPDBLoader();
 
-    this.loadMolecule(pathToMolecule, bondColor);
+    this.loadMolecule(pathToMolecule);
 
     scene.add(this.group);
   }

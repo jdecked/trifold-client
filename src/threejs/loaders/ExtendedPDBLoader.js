@@ -5,6 +5,8 @@
  *
  * Extension by:
  * @author jdecked <justine@minerva.kgi.edu>
+ *
+ * @flow strict
  */
 
 import {
@@ -144,18 +146,23 @@ export default class ExtendedPDBLoader extends PDBLoader {
     this.lines = [];
   }
 
-  static capitalize(text) {
+  static capitalize(text: string) {
     return (
       text.charAt(0).toUpperCase() +
       text.slice(1, text.length - 1).toLowerCase()
     );
   }
 
-  static hash(s, e) {
+  static hash(s: number, e: number) {
     return `s${Math.min(s, e)}e${Math.max(s, e)}`;
   }
 
-  parseCovalentBond(start, length, line, startAtom) {
+  parseCovalentBond(
+    start: number,
+    length: number,
+    line: number,
+    startAtom: number
+  ) {
     const bondsHash = {};
     const endAtom = parseInt(this.lines[line].substr(start, length), 10);
 
@@ -214,7 +221,6 @@ export default class ExtendedPDBLoader extends PDBLoader {
     const oxygens = this.atoms.filter(a => a.element === 'O');
     const carbons = this.atoms.filter(a => a.element === 'C');
     const hydrogens = this.atoms.filter(a => a.element === 'H');
-    // const possibleBonds = {};
 
     for (let a = 0; a < nitrogens.length; a += 1) {
       for (let a2 = 0; a2 < oxygens.length; a2 += 1) {
@@ -223,7 +229,7 @@ export default class ExtendedPDBLoader extends PDBLoader {
 
         if (nitrogen.aminoAcid !== oxygen.aminoAcid) {
           const ONdistance = distanceMatrix[oxygen.id][nitrogen.id];
-    
+
           const carbonylBonds = this.covalentBonds.filter(bond => {
             const carbonIds = carbons.map(carbon => carbon.id);
             return bond[0] === oxygen.id - 1 && carbonIds.includes(bond[1] + 1);
@@ -234,12 +240,21 @@ export default class ExtendedPDBLoader extends PDBLoader {
               bond[0] === nitrogen.id - 1 && hydrogenIds.includes(bond[1] + 1)
             );
           });
-    
+
           const CNdistance = carbonylBonds
             .map(bond => distanceMatrix[bond[1] + 1][nitrogen.id])
             .reduce((accumulator, value) => accumulator + value, 0);
           const CHdistance = amineBonds
-            .map(amineBond => carbonylBonds.map(carbonylBond => distanceMatrix[amineBond[1] + 1][carbonylBond[1] + 1]))
+            .map(
+              amineBond =>
+                // eslint-disable-next-line implicit-arrow-linebreak
+                carbonylBonds.map(
+                  carbonylBond =>
+                    // eslint-disable-next-line implicit-arrow-linebreak
+                    distanceMatrix[amineBond[1] + 1][carbonylBond[1] + 1]
+                )
+              // eslint-disable-next-line function-paren-newline
+            )
             .reduce((accumulator, value) => accumulator + value, 0);
           const OHdistance = amineBonds
             .map(bond => distanceMatrix[oxygen.id][bond[1] + 1])
@@ -252,7 +267,7 @@ export default class ExtendedPDBLoader extends PDBLoader {
             1 / CNdistance === Infinity ? 0 : 1 / CNdistance;
           const inverseOHdistance =
             1 / OHdistance === Infinity ? 0 : 1 / OHdistance;
-    
+
           const energy =
             0.084 *
             332 *
@@ -260,111 +275,13 @@ export default class ExtendedPDBLoader extends PDBLoader {
               inverseCHdistance -
               inverseCNdistance -
               inverseOHdistance);
-    
+
           if (energy < -0.5 && carbonylBonds && amineBonds) {
-            this.hydrogenBonds.push([
-              nitrogen.id - 1,
-              oxygen.id - 1,
-              energy
-            ]);
-            // if (possibleBonds[nitrogen.id - 1]) {
-            //   possibleBonds[nitrogen.id - 1].push({ to: oxygen.id - 1, energy });
-            // } else {
-            //   possibleBonds[nitrogen.id - 1] = [{ to: oxygen.id - 1, energy }];
-            // }
+            this.hydrogenBonds.push([nitrogen.id - 1, oxygen.id - 1, energy]);
           }
         }
       }
     }
-
-    // const highestBonds = {};
-
-    // Object.entries(possibleBonds).forEach(([startAtom, possibleEndAtoms]) => {
-    //   const highestEnergy = Math.min(
-    //     ...possibleEndAtoms.map(possibleEnd => possibleEnd.energy)
-    //   );
-    //   const highestEnergyBond = possibleEndAtoms.filter(
-    //     possibleEndAtom => possibleEndAtom.energy === highestEnergy
-    //   )[0];
-    //   highestBonds[highestEnergyBond.to] = {
-    //     to: startAtom,
-    //     energy: highestEnergyBond.energy
-    //   };
-    //   highestBonds[startAtom] = {
-    //     to: highestEnergyBond.to,
-    //     energy: highestEnergyBond.energy
-    //   };
-    // });
-
-    // // TODO: Use Edmonds' blossom algorithm for matching instead.
-    // const finalBonds = {};
-
-    // Object.entries(highestBonds).forEach(([startAtom, endAtom]) => {
-    //   const startAtomInt = parseInt(startAtom, 10);
-    //   const endAtomInt = parseInt(endAtom.to, 10);
-    //   const toAtomInt = parseInt(highestBonds[endAtom.to].to, 10);
-    //   if (startAtomInt !== toAtomInt) {
-    //     const higherEnergy = Math.max(
-    //       highestBonds[startAtomInt].energy,
-    //       highestBonds[endAtomInt].energy
-    //     );
-    //     const higherEnergyBond = [
-    //       highestBonds[startAtomInt],
-    //       highestBonds[endAtomInt]
-    //     ].filter(bond => bond.energy === higherEnergy)[0];
-
-    //     if (parseInt(higherEnergyBond.to, 10) === startAtomInt) {
-    //       if (possibleBonds[endAtomInt].length > 1) {
-    //         const secondHighestEnergy = Math.min(
-    //           ...possibleBonds[endAtomInt]
-    //             .filter(bond => bond.to !== highestBonds[endAtomInt].to)
-    //             .map(bond => bond.energy)
-    //         );
-    //         [finalBonds[endAtomInt]] = possibleBonds[endAtomInt].filter(
-    //           bond => bond.energy === secondHighestEnergy
-    //         );
-    //       } else {
-    //         finalBonds[endAtomInt] = null;
-    //       }
-    //       finalBonds[startAtomInt] = {
-    //         to: parseInt(higherEnergyBond.to, 10),
-    //         energy: higherEnergyBond.energy
-    //       };
-    //     } else {
-    //       if (possibleBonds[startAtomInt].length > 1) {
-    //         const secondHighestEnergy = Math.min(
-    //           ...possibleBonds[startAtomInt]
-    //             .filter(bond => bond.to !== highestBonds[startAtomInt].to)
-    //             .map(bond => bond.energy)
-    //         );
-    //         [finalBonds[startAtomInt]] = possibleBonds[startAtomInt].filter(
-    //           bond => bond.energy === secondHighestEnergy
-    //         );
-    //       } else {
-    //         finalBonds[startAtomInt] = null;
-    //       }
-    //       finalBonds[endAtomInt] = {
-    //         to: parseInt(higherEnergyBond.to, 10),
-    //         energy: higherEnergyBond.energy
-    //       };
-    //     }
-    //   } else {
-    //     finalBonds[startAtomInt] = {
-    //       to: endAtomInt,
-    //       energy: endAtom.energy
-    //     };
-    //     finalBonds[endAtomInt] = {
-    //       to: startAtomInt,
-    //       energy: endAtom.energy
-    //     };
-    //   }
-    // });
-
-    // Object.entries(finalBonds).forEach(([startAtom, endAtom]) => {
-    //   if (startAtom && endAtom) {
-    //     this.hydrogenBonds.push([startAtom, endAtom.to, endAtom.energy]);
-    //   }
-    // });
   };
 
   buildGeometry() {
@@ -463,7 +380,7 @@ export default class ExtendedPDBLoader extends PDBLoader {
     return build;
   }
 
-  parseAtoms(line) {
+  parseAtoms(line: number) {
     const id = parseInt(this.lines[line].substr(6, 5), 10);
     const x = parseFloat(this.lines[line].substr(30, 7));
     const y = parseFloat(this.lines[line].substr(38, 7));
@@ -495,7 +412,7 @@ export default class ExtendedPDBLoader extends PDBLoader {
     this.atoms.push(atom);
   }
 
-  parseCovalentBonds(line) {
+  parseCovalentBonds(line: number) {
     const startAtom = parseInt(this.lines[line].substr(6, 5), 10);
 
     this.parseCovalentBond(11, 5, line, startAtom);
@@ -504,27 +421,11 @@ export default class ExtendedPDBLoader extends PDBLoader {
     this.parseCovalentBond(26, 5, line, startAtom);
   }
 
-  findHydrogenBonds() {
-    // for (let a = 0; a < this.atoms.length; a += 1) {
-    //   const atom = this.atoms[a];
-    //   const { element } = atom;
-
-    //   if (element === 'O' && atom.hydrogenBondedTo === null) {
-    //     atom.hydrogenBondedTo = this.findHydrogenBondedElementTo(atom, 'N');
-    //   } else if (element === 'N' && atom.hydrogenBondedTo === null) {
-    //     atom.hydrogenBondedTo = this.findHydrogenBondedElementTo(atom, 'O');
-    //   }
-    // }
-
-    // const bondHash = this.parseHydrogenBonds();
-    this.inferHydrogenBonds();
-  }
-
-  static extractCommand(line) {
+  static extractCommand(line: string) {
     return line.split(' ')[0];
   }
 
-  parse(text) {
+  parse(text: string) {
     this.lines = text.split('\n');
 
     for (let line = 0; line < this.lines.length; line += 1) {
@@ -543,7 +444,7 @@ export default class ExtendedPDBLoader extends PDBLoader {
       }
     }
 
-    this.findHydrogenBonds();
+    this.inferHydrogenBonds();
 
     return this.buildGeometry();
   }
