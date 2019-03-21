@@ -9,7 +9,7 @@ import {
 } from 'three-full';
 import type { Store } from 'redux';
 import { updateScore } from '../actions';
-import ProteinGroup from './subjects/ProteinGroup';
+import AminoAcidGroup from './subjects/AminoAcidGroup';
 import GeneralLights from './GeneralLights';
 import colors from '../utils/colors';
 import store from '../store';
@@ -23,7 +23,7 @@ type ScreenDimensions = {
 export default class SceneManager {
   lights: GeneralLights;
 
-  protein: ProteinGroup;
+  protein: AminoAcidGroup;
 
   canvas: HTMLCanvasElement;
 
@@ -132,6 +132,6 @@ export default class SceneManager {
 
   createSceneSubjects() {
     this.lights = new GeneralLights(this.scene);
-    this.protein = new ProteinGroup(this.scene, 'molecules/caffeine.pdb');
+    this.protein = new AminoAcidGroup(this.scene, 'molecules/2jof.pdb');
   }
 }
