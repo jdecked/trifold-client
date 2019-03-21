@@ -221,6 +221,7 @@ export default class ExtendedPDBLoader extends PDBLoader {
     const oxygens = this.atoms.filter(a => a.element === 'O');
     const carbons = this.atoms.filter(a => a.element === 'C');
     const hydrogens = this.atoms.filter(a => a.element === 'H');
+    const possibleBonds = {};
 
     for (let a = 0; a < nitrogens.length; a += 1) {
       for (let a2 = 0; a2 < oxygens.length; a2 += 1) {
@@ -277,11 +278,107 @@ export default class ExtendedPDBLoader extends PDBLoader {
               inverseOHdistance);
 
           if (energy < -0.5 && carbonylBonds && amineBonds) {
-            this.hydrogenBonds.push([nitrogen.id - 1, oxygen.id - 1, energy]);
+            if (possibleBonds[nitrogen.id - 1]) {
+              possibleBonds[nitrogen.id - 1].push({
+                to: oxygen.id - 1,
+                energy
+              });
+            } else {
+              possibleBonds[nitrogen.id - 1] = [{ to: oxygen.id - 1, energy }];
+            }
           }
         }
       }
     }
+
+    const highestBonds = {};
+
+    Object.entries(possibleBonds).forEach(([startAtom, possibleEndAtoms]) => {
+      const highestEnergy = Math.min(
+        ...possibleEndAtoms.map(possibleEnd => possibleEnd.energy)
+      );
+      const highestEnergyBond = possibleEndAtoms.filter(
+        possibleEndAtom => possibleEndAtom.energy === highestEnergy
+      )[0];
+      highestBonds[highestEnergyBond.to] = {
+        to: startAtom,
+        energy: highestEnergyBond.energy
+      };
+      highestBonds[startAtom] = {
+        to: highestEnergyBond.to,
+        energy: highestEnergyBond.energy
+      };
+    });
+
+    // TODO: Use Edmonds' blossom algorithm for matching instead.
+    const finalBonds = {};
+
+    Object.entries(highestBonds).forEach(([startAtom, endAtom]) => {
+      const startAtomInt = parseInt(startAtom, 10);
+      const endAtomInt = parseInt(endAtom.to, 10);
+      const toAtomInt = parseInt(highestBonds[endAtom.to].to, 10);
+      if (startAtomInt !== toAtomInt) {
+        const higherEnergy = Math.max(
+          highestBonds[startAtomInt].energy,
+          highestBonds[endAtomInt].energy
+        );
+        const higherEnergyBond = [
+          highestBonds[startAtomInt],
+          highestBonds[endAtomInt]
+        ].filter(bond => bond.energy === higherEnergy)[0];
+
+        if (parseInt(higherEnergyBond.to, 10) === startAtomInt) {
+          if (possibleBonds[endAtomInt].length > 1) {
+            const secondHighestEnergy = Math.min(
+              ...possibleBonds[endAtomInt]
+                .filter(bond => bond.to !== highestBonds[endAtomInt].to)
+                .map(bond => bond.energy)
+            );
+            [finalBonds[endAtomInt]] = possibleBonds[endAtomInt].filter(
+              bond => bond.energy === secondHighestEnergy
+            );
+          } else {
+            finalBonds[endAtomInt] = null;
+          }
+          finalBonds[startAtomInt] = {
+            to: parseInt(higherEnergyBond.to, 10),
+            energy: higherEnergyBond.energy
+          };
+        } else {
+          if (possibleBonds[startAtomInt].length > 1) {
+            const secondHighestEnergy = Math.min(
+              ...possibleBonds[startAtomInt]
+                .filter(bond => bond.to !== highestBonds[startAtomInt].to)
+                .map(bond => bond.energy)
+            );
+            [finalBonds[startAtomInt]] = possibleBonds[startAtomInt].filter(
+              bond => bond.energy === secondHighestEnergy
+            );
+          } else {
+            finalBonds[startAtomInt] = null;
+          }
+          finalBonds[endAtomInt] = {
+            to: parseInt(higherEnergyBond.to, 10),
+            energy: higherEnergyBond.energy
+          };
+        }
+      } else {
+        finalBonds[startAtomInt] = {
+          to: endAtomInt,
+          energy: endAtom.energy
+        };
+        finalBonds[endAtomInt] = {
+          to: startAtomInt,
+          energy: endAtom.energy
+        };
+      }
+    });
+
+    Object.entries(finalBonds).forEach(([startAtom, endAtom]) => {
+      if (startAtom && endAtom) {
+        this.hydrogenBonds.push([startAtom, endAtom.to, endAtom.energy]);
+      }
+    });
   };
 
   buildGeometry() {

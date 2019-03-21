@@ -10,6 +10,7 @@ import {
 import type { Store } from 'redux';
 import { updateScore } from '../actions';
 import AminoAcidGroup from './subjects/AminoAcidGroup';
+import Planet from './subjects/Planet';
 import GeneralLights from './GeneralLights';
 import colors from '../utils/colors';
 import store from '../store';
@@ -23,7 +24,7 @@ type ScreenDimensions = {
 export default class SceneManager {
   lights: GeneralLights;
 
-  protein: AminoAcidGroup;
+  protein: ?AminoAcidGroup;
 
   canvas: HTMLCanvasElement;
 
@@ -71,19 +72,26 @@ export default class SceneManager {
   }
 
   update() {
-    this.controls.update();
-    const rotation = [
-      this.camera.rotation.x,
-      this.camera.rotation.y,
-      this.camera.rotation.z
-    ];
-    const rotationSum = rotation.reduce(
-      (accumulator, currentValue) => accumulator + currentValue
-    );
+    if (window.location.pathname === '/fold') {
+      this.controls.update();
+      const rotation = [
+        this.camera.rotation.x,
+        this.camera.rotation.y,
+        this.camera.rotation.z
+      ];
+      const rotationSum = rotation.reduce(
+        (accumulator, currentValue) => accumulator + currentValue
+      );
 
-    store.dispatch(updateScore(Math.round(Math.abs(rotationSum * 11))));
+      store.dispatch(updateScore(Math.round(Math.abs(rotationSum * 11))));
 
-    this.renderer.render(this.scene, this.camera);
+      this.renderer.render(this.scene, this.camera);
+    } else if (window.location.pathname === '/home') {
+      this.controls.update();
+      const timer = Date.now() * 0.00000000000001;
+      this.planet.update(timer);
+      this.renderer.render(this.scene, this.camera);
+    }
   }
 
   buildTrackpadControls() {
@@ -97,7 +105,7 @@ export default class SceneManager {
 
   buildScene() {
     this.scene = new Scene();
-    this.scene.background = new Color(colors.gray);
+    this.scene.background = new Color(colors.lightGray);
   }
 
   buildRender({ width, height }: ScreenDimensions) {
@@ -116,7 +124,7 @@ export default class SceneManager {
 
   buildCamera({ width, height }: ScreenDimensions) {
     const aspectRatio = width / height;
-    const fieldOfView = 70;
+    const fieldOfView = 80;
     const nearPlane = 1;
     const farPlane = 5000;
 
@@ -132,6 +140,10 @@ export default class SceneManager {
 
   createSceneSubjects() {
     this.lights = new GeneralLights(this.scene);
-    this.protein = new AminoAcidGroup(this.scene, 'molecules/2jof.pdb');
+    if (window.location.pathname === '/fold') {
+      this.protein = new AminoAcidGroup(this.scene, 'molecules/chignolin.pdb');
+    } else if (window.location.pathname === '/home') {
+      this.planet = new Planet(this.scene);
+    }
   }
 }

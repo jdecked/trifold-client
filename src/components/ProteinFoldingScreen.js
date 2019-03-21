@@ -1,10 +1,23 @@
 // @flow strict
 import React, { Component } from 'react';
-import '../styles/ProteinFoldingScreen.scss';
+// $FlowFixMe: material-ui has no up-to-date types :(
+import { withStyles } from '@material-ui/core/styles';
 import threeEntryPoint from '../threejs/threeEntryPoint';
 import ScorebarContainer from '../containers/ScorebarContainer';
 
-export default class ProteinFoldingScreen extends Component<{}> {
+const styles = () => ({
+  container: {
+    textAlign: 'center',
+    height: '100%',
+    width: '100%'
+  }
+});
+
+type Props = {|
+  classes: typeof styles
+|};
+
+class ProteinFoldingScreen extends Component<Props> {
   // eslint-disable-next-line react/sort-comp
   threeRootElement: ?HTMLDivElement;
 
@@ -17,9 +30,11 @@ export default class ProteinFoldingScreen extends Component<{}> {
   }
 
   render() {
+    const { classes } = this.props;
+
     return (
       <div
-        className="ProteinFoldingScreen"
+        className={classes.container}
         ref={element => this.setThreeRef(element)}
       >
         <ScorebarContainer />
@@ -27,3 +42,5 @@ export default class ProteinFoldingScreen extends Component<{}> {
     );
   }
 }
+
+export default withStyles(styles)(ProteinFoldingScreen);

@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import type { ContextRouter } from 'react-router-dom';
-import '../styles/App.scss';
 import ProteinFoldingScreen from './ProteinFoldingScreen';
 import Home from './Home';
 import LoginContainer from '../containers/LoginContainer';

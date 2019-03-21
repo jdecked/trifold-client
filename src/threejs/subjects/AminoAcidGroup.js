@@ -7,6 +7,9 @@ import {
   IcosahedronBufferGeometry,
   Vector3,
   MeshPhongMaterial,
+  MeshBasicMaterial,
+  TextureLoader,
+  DoubleSide,
   Scene
 } from 'three-full';
 import ExtendedPDBLoader from '../loaders/ExtendedPDBLoader';
@@ -109,7 +112,7 @@ export default class AminoAcidGroup {
         const object = new Mesh(
           boxGeometry,
           new MeshPhongMaterial({
-            color: '#C2F866',
+            color: '#3a9a6e',
             emissiveIntensity: 0.5,
             reflectivity: 0.1
           })
@@ -136,19 +139,18 @@ export default class AminoAcidGroup {
           hydrogenBondPositions.getY(i + 1),
           hydrogenBondPositions.getZ(i + 1)
         );
-        const boxGeometry = new BoxBufferGeometry(1.6, 1.6, 1.07);
+        const boxGeometry = new BoxBufferGeometry(1.5, 1.5, 1.05);
 
         start.multiplyScalar(75);
         end.multiplyScalar(75);
 
-        const object = new Mesh(
-          boxGeometry,
-          new MeshPhongMaterial({
-            color: '#ff0000',
-            emissiveIntensity: 0.5,
-            reflectivity: 0.1
-          })
-        );
+        const texture = new TextureLoader().load('textures/water_flow.png');
+        const material = new MeshBasicMaterial({
+          map: texture,
+          side: DoubleSide
+        });
+
+        const object = new Mesh(boxGeometry, material);
         object.position.copy(start);
         object.position.lerp(end, 0.5);
         object.scale.set(10, 10, start.distanceTo(end));
