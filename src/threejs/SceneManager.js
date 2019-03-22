@@ -5,7 +5,8 @@ import {
   Color,
   WebGLRenderer,
   PerspectiveCamera,
-  TrackballControls
+  TrackballControls,
+  Fog
 } from 'three-full';
 import type { Store } from 'redux';
 import { updateScore } from '../actions';
@@ -25,6 +26,8 @@ export default class SceneManager {
   lights: GeneralLights;
 
   protein: ?AminoAcidGroup;
+
+  planet: ?Planet;
 
   canvas: HTMLCanvasElement;
 
@@ -89,7 +92,9 @@ export default class SceneManager {
     } else if (window.location.pathname === '/home') {
       this.controls.update();
       const timer = Date.now() * 0.00000000000001;
-      this.planet.update(timer);
+      if (this.planet) {
+        this.planet.update(timer);
+      }
       this.renderer.render(this.scene, this.camera);
     }
   }
@@ -143,6 +148,7 @@ export default class SceneManager {
     if (window.location.pathname === '/fold') {
       this.protein = new AminoAcidGroup(this.scene, 'molecules/chignolin.pdb');
     } else if (window.location.pathname === '/home') {
+      this.scene.fog = new Fog(0xefd1b5, 1, 2000);
       this.planet = new Planet(this.scene);
     }
   }

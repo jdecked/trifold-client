@@ -295,8 +295,10 @@ export default class ExtendedPDBLoader extends PDBLoader {
 
     Object.entries(possibleBonds).forEach(([startAtom, possibleEndAtoms]) => {
       const highestEnergy = Math.min(
+        // $FlowFixMe: This is a bug in Flow (https://github.com/facebook/flow/issues/2221)
         ...possibleEndAtoms.map(possibleEnd => possibleEnd.energy)
       );
+      // $FlowFixMe: This is a bug in Flow (https://github.com/facebook/flow/issues/2221)
       const highestEnergyBond = possibleEndAtoms.filter(
         possibleEndAtom => possibleEndAtom.energy === highestEnergy
       )[0];
@@ -315,7 +317,9 @@ export default class ExtendedPDBLoader extends PDBLoader {
 
     Object.entries(highestBonds).forEach(([startAtom, endAtom]) => {
       const startAtomInt = parseInt(startAtom, 10);
+      // $FlowFixMe: This is a bug in Flow (https://github.com/facebook/flow/issues/2221)
       const endAtomInt = parseInt(endAtom.to, 10);
+      // $FlowFixMe: This is a bug in Flow (https://github.com/facebook/flow/issues/2221)
       const toAtomInt = parseInt(highestBonds[endAtom.to].to, 10);
       if (startAtomInt !== toAtomInt) {
         const higherEnergy = Math.max(
@@ -334,6 +338,7 @@ export default class ExtendedPDBLoader extends PDBLoader {
                 .filter(bond => bond.to !== highestBonds[endAtomInt].to)
                 .map(bond => bond.energy)
             );
+            // $FlowFixMe: Flow can't parse this yet
             [finalBonds[endAtomInt]] = possibleBonds[endAtomInt].filter(
               bond => bond.energy === secondHighestEnergy
             );
@@ -351,6 +356,7 @@ export default class ExtendedPDBLoader extends PDBLoader {
                 .filter(bond => bond.to !== highestBonds[startAtomInt].to)
                 .map(bond => bond.energy)
             );
+            // $FlowFixMe: Flow can't parse this yet
             [finalBonds[startAtomInt]] = possibleBonds[startAtomInt].filter(
               bond => bond.energy === secondHighestEnergy
             );
@@ -365,17 +371,20 @@ export default class ExtendedPDBLoader extends PDBLoader {
       } else {
         finalBonds[startAtomInt] = {
           to: endAtomInt,
+          // $FlowFixMe: This is a bug in Flow (https://github.com/facebook/flow/issues/2221)
           energy: endAtom.energy
         };
         finalBonds[endAtomInt] = {
           to: startAtomInt,
+          // $FlowFixMe: This is a bug in Flow (https://github.com/facebook/flow/issues/2221)
           energy: endAtom.energy
         };
       }
     });
 
     Object.entries(finalBonds).forEach(([startAtom, endAtom]) => {
-      if (startAtom && endAtom) {
+      if (startAtom && endAtom !== null) {
+        // $FlowFixMe: This is a bug in Flow (https://github.com/facebook/flow/issues/2221)
         this.hydrogenBonds.push([startAtom, endAtom.to, endAtom.energy]);
       }
     });

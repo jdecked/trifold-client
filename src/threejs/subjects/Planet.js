@@ -6,11 +6,12 @@ import {
   MeshLambertMaterial,
   TextureLoader,
   TorusBufferGeometry,
-  TetrahedronBufferGeometry
+  TetrahedronBufferGeometry,
+  Scene
 } from 'three';
 
 export default class Planet {
-  planet: ?Mesh;
+  group: Group;
 
   constructor(scene: Scene) {
     this.group = new Group();
