@@ -17,7 +17,6 @@ type Props = {|
   classes: typeof styles
 |};
 
-// TODO (jdc): Render torus ring level select instead
 class Home extends Component<Props> {
   // eslint-disable-next-line react/sort-comp
   threeRootElement: ?HTMLDivElement;

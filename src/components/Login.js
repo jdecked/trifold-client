@@ -51,8 +51,7 @@ class Login extends Component<Props> {
     const idToken = googleUser.getAuthResponse().id_token;
 
     setLoggedInUser(idToken);
-    // TODO (jdc): Build decent /home route
-    history.push('/fold');
+    history.push('/home');
   };
 
   attachLogin = (element: ?HTMLElement) => {
